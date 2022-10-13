@@ -37,11 +37,13 @@ function load_mailbox(mailbox) {
       
       element.innerHTML = 
         `
-        <div class="card-body">
-          <h5 class="card-title">${email.subject}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">From: ${email.sender}</h6>
-          <h6 class="card-subtitle mb-2 text-muted">Time: ${email.timestamp}</h6>
-        </div>
+        <a href="/emails/${email.id}" class="email-link" style="text-decoration: none">
+          <div class="card-body">
+            <h5 class="card-title">${email.subject}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">From: ${email.sender}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Time: ${email.timestamp}</h6>
+          </div>
+        </a>
         `
         element.style.backgroundColor = email.read? "#ebebeb" : "White";
       document.querySelector("#emails-view").append(element)
