@@ -37,13 +37,11 @@ function load_mailbox(mailbox) {
       
       element.innerHTML = 
         `
-        <a href="/emails/${email.id}" class="email-link" style="text-decoration: none">
           <div class="card-body">
             <h5 class="card-title">${email.subject}</h5>
             <h6 class="card-subtitle mb-2 text-muted">From: ${email.sender}</h6>
             <h6 class="card-subtitle mb-2 text-muted">Time: ${email.timestamp}</h6>
           </div>
-        </a>
         `
         element.style.backgroundColor = email.read? "#ebebeb" : "White";
       document.querySelector("#emails-view").append(element)
@@ -51,7 +49,6 @@ function load_mailbox(mailbox) {
     });
   })
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
-
 }
 
 const compose_form = document.querySelector('#compose-form');
