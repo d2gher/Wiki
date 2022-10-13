@@ -33,8 +33,19 @@ function load_mailbox(mailbox) {
   .then(results => {
     results.forEach(email => {
       const element = document.createElement("div");
-      element.innerHTML = `<p> From: ${email.sender}<br> Subject: ${email.subject}<br> Time:${email.timestamp}`
+      element.className = "Card"
+      
+      element.innerHTML = 
+        `
+        <div class="card-body">
+          <h5 class="card-title">${email.subject}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">From: ${email.sender}</h6>
+          <h6 class="card-subtitle mb-2 text-muted">Time: ${email.timestamp}</h6>
+        </div>
+        `
+        element.style.backgroundColor = email.read? "#ebebeb" : "White";
       document.querySelector("#emails-view").append(element)
+      console.log(email)
     });
   })
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
@@ -59,6 +70,7 @@ compose_form.addEventListener('submit', function(event) {
   .then(response => response.json())
   .then(results => {
     console.log(results)
+    load_mailbox('Sent');
   })
   .catch(function(error) { console.error(error) } )
 });
