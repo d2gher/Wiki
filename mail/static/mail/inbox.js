@@ -13,6 +13,7 @@ function compose_email() {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#email-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
   // Clear out composition fields
@@ -108,7 +109,7 @@ compose_form.addEventListener('submit', function(event) {
   })
   .then(response => response.json())
   .then(results => {
-    load_mailbox('Sent');
+    load_mailbox('sent');
   }).catch(function(error) { console.error(error) } )
 });
 
@@ -132,11 +133,15 @@ function email_view(id) {
         <h6 class="card-title">From: ${email.sender}</h6>
         <h6 class="card-title">To: ${email.recipients}</h6>
         <h6 class="card-title">At: ${email.timestamp}</h6>
+        <a id="replay" class="btn btn-primary">Reply</a>
+        <div class="line"></div>
         <p class="card-text">${email.body}</p>
-        <a href="#" class="btn btn-primary">Replay</a>
       </div>
     </div>
     `
+    const replybt = document.querySelector("#replay");
+    replybt.addEventListener("click", () => {compose_reply(email.sender, email.subject, email.timestamp, email.body)})
+
 
     // Mark the email as read
     fetch(`/emails/${id}`, {
@@ -148,3 +153,15 @@ function email_view(id) {
   })
 }
 
+function compose_reply(sender, subject, time, body) {
+  // Show compose view and hide other views
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#email-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'block';
+
+  if (subject.slice(0, 4) !== "Re: ") {subject = `Re: ${subject}`}
+  // Clear out composition fields
+  document.querySelector('#compose-recipients').value = sender;
+  document.querySelector('#compose-subject').value = subject
+  document.querySelector('#compose-body').value = `On ${time} ${sender} wrote: \n${body}`
+}

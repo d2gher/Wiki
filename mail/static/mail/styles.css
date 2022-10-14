@@ -21,3 +21,10 @@ a:not([href]) {
     color: white;
 }
 
+.line {
+    height: 1px;
+    background: rgb(199, 199, 199);
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
