@@ -5,7 +5,11 @@ textarea {
 .Card {
     border: 1px solid rgba(128, 128, 128, 0.386);
     border-radius: 5px;
-    box-shadow: 2px 2px 8px #1111113d;
     margin-bottom: .5rem;
+}
+
+.Card:hover {
+    box-shadow: 2px 2px 8px #1111113d;
+    cursor: pointer;
 }
 
