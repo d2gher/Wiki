@@ -29,13 +29,17 @@ function load_mailbox(mailbox) {
   document.querySelector('#email-view').style.display = 'none';
 
   // Show the mailbox name
+  document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+  // Fetch that mailbox from the database
   fetch(`/emails/${mailbox}`)
   .then(response => response.json())
   .then(results => {
+    // Create a new card for each email
     results.forEach(email => {
       const element = document.createElement("div");
+
       element.className = "Card"
-      
       element.innerHTML = 
         `
           <div class="card-body">
@@ -44,21 +48,23 @@ function load_mailbox(mailbox) {
             <h6 class="card-subtitle mb-2 text-muted">Time: ${email.timestamp}</h6>
           </div>
         `
-        element.style.backgroundColor = email.read? "#ebebeb" : "White";
-        element.addEventListener("click", () => email_view(email.id));
+      element.style.backgroundColor = email.read? "#ebebeb" : "White";
+      element.addEventListener("click", () => email_view(email.id));
+
+      // Add the email to the DOM
       document.querySelector("#emails-view").append(element);
     });
   }).catch(err => console.log(err))
-  document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 }
 
 const compose_form = document.querySelector('#compose-form');
 
 compose_form.addEventListener('submit', function(event) {
+  // Stop the default submit event action
   event.preventDefault();
 
+  // Send the email
   const formData = new FormData(this);
-
   fetch('/emails', {
     method: 'POST',
     body: JSON.stringify({
@@ -71,21 +77,21 @@ compose_form.addEventListener('submit', function(event) {
   .then(results => {
     console.log(results)
     load_mailbox('Sent');
-  })
-  .catch(function(error) { console.error(error) } )
+  }).catch(function(error) { console.error(error) } )
 });
 
 function email_view(id) {
+  // Show the email view and hide the rest
   document.querySelector('#email-view').style.display = 'block';
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
 
   const email_box = document.querySelector("#email-view");
 
+  // Get the desired email information and add it to the DOM
   fetch(`/emails/${id}`)
   .then(res => res.json())
   .then(email => {
-    console.log(email)
     email_box.innerHTML = 
     `
     <div class="card">
@@ -99,6 +105,8 @@ function email_view(id) {
       </div>
     </div>
     `
+
+    // Mark the email as read
     fetch(`/emails/${id}`, {
       method: 'PUT',
       body: JSON.stringify({
@@ -106,6 +114,5 @@ function email_view(id) {
       })
     }).catch(err => console.log(err))
   })
-
 }
 
