@@ -46,13 +46,46 @@ function load_mailbox(mailbox) {
             <h5 class="card-title">${email.subject}</h5>
             <h6 class="card-subtitle mb-2 text-muted">From: ${email.sender}</h6>
             <h6 class="card-subtitle mb-2 text-muted">Time: ${email.timestamp}</h6>
+            
           </div>
         `
       element.style.backgroundColor = email.read? "#ebebeb" : "White";
       element.addEventListener("click", () => email_view(email.id));
-
+      
       // Add the email to the DOM
       document.querySelector("#emails-view").append(element);
+
+      if (mailbox == "inbox") {
+        const archive = document.createElement("a");
+        archive.className = "btn btn-primary";
+        archive.innerHTML = "Archive";
+        archive.addEventListener("click", () => {
+
+          fetch(`/emails/${email.id}`, {
+            method: "PUT",
+            body: JSON.stringify({
+              archived: true
+            })
+          }).then(() => { load_mailbox('inbox') })
+        });
+
+        element.firstElementChild.append(archive);
+      } else if (mailbox == "archive") {
+          const archive = document.createElement("a");
+          archive.className = "btn btn-primary";
+          archive.innerHTML = "Unarchive";
+
+          archive.addEventListener("click", () => {
+            fetch(`/emails/${email.id}`, {
+              method: "PUT",
+              body: JSON.stringify({
+                archived: false
+              })
+            }).then(() => { load_mailbox('inbox') })
+          });
+
+          element.firstElementChild.append(archive);
+      }
     });
   }).catch(err => console.log(err))
 }
@@ -75,7 +108,6 @@ compose_form.addEventListener('submit', function(event) {
   })
   .then(response => response.json())
   .then(results => {
-    console.log(results)
     load_mailbox('Sent');
   }).catch(function(error) { console.error(error) } )
 });

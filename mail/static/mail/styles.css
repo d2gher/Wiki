@@ -6,10 +6,18 @@ textarea {
     border: 1px solid rgba(128, 128, 128, 0.386);
     border-radius: 5px;
     margin-bottom: .5rem;
+    padding: auto 1px;
 }
 
+.card-body {
+    padding: .5rem 1rem; 
+}
 .Card:hover {
     box-shadow: 2px 2px 8px #1111113d;
     cursor: pointer;
+}
+
+a:not([href]) {
+    color: white;
 }
 
